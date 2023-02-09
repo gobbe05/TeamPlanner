@@ -1,0 +1,47 @@
+﻿
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0 text-white-50">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Time Used</th>
+                                    <th scope="col">Money Used</th>
+                                    <th scope="col">Budget</th>
+                                    <th scope="col"></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var group in Model)
+                                {
+                                    int moneyResult = group.Budget - group.MoneyUsed;
+                                    <tr>
+                                        <th>@group.Id</th>
+                                        <td class="fw-bolder">@group.Name</td>
+                                        <td>@group.TimeUsed h</td>
+                                        <td>@group.MoneyUsed $ @if (moneyResult > 0) {<p class="text-success">+@moneyResult</p>} else {<p class="text-danger">@moneyResult</p>}</td>
+                                        <td class="text-warning">@group.Budget $</td>
+                                        <td class="fw-bold">
+                                            <a class="pe-1" href="/Group/Details/@group.Id">Details</a>
+                                            <a class="pe-1" href="/Group/Edit/@group.Id">Edit</a>
+                                            <a href="/Group/Delete/@group.Id">Delete</a>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

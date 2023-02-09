@@ -1,0 +1,51 @@
+﻿@using TeamPlanner.ViewModels
+@model DashboardViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col w-50">
+            
+        </div>
+        <div class="col w-50">
+            <div class="p-2 row">
+                <div class="card p-2 mt-1">
+                    <div class="card-body">
+
+                        @for (int i = 0; i < 48; i+=2)
+                        {
+                            int hour = i / 2;
+                            string hourString;
+                            if (hour % 10 == hour)
+                            {
+                                hourString = "0" + hour.ToString();
+                            }
+                            else
+                            {
+                                hourString = hour.ToString();
+                            }
+                            if (i % 2 == 0)
+                            {
+                                hourString += ".00";
+                            }
+                            else
+                            {
+                                hourString += ".30";
+                            }
+                            <div class="row">
+                                <div class="col border-end text-white text-center">
+                                    <p class="m-0">@hourString</p>
+                                </div>
+                                @for (int y = 1; y <= 7; y++)
+                                {
+                                    <div class="col border-end cell" data-weekday="@y" data-time="@hourString">
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

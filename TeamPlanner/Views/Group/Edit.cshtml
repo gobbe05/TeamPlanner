@@ -1,0 +1,83 @@
+﻿@using TeamPlanner.ViewModels
+@model EditGroupViewModel
+
+@if(TempData["Error"] != null)
+{
+    <p class="text-danger">@TempData["Error"]</p>
+}
+
+<div class="card p-5">
+    <div class="card-header">
+        <h4 class="fw-bold text-white-50">Edit Group</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input class="d-none" asp-for="Users" value="@Model.Users"/>
+            <input class="d-none" asp-for="group.Id" value="@Model.group.Id" />
+            <div>
+                <label asp-for="group.Name" class="form-label"></label>
+                <input asp-for="group.Name" class="form-control"/>
+                <span asp-validation-for="group.Name" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="group.TimeUsed" class="form-label"></label>
+                <input asp-for="group.TimeUsed" class="form-control" />
+                <span asp-validation-for="group.TimeUsed" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="group.MoneyUsed" class="form-label"></label>
+                <input asp-for="group.MoneyUsed" class="form-control" />
+                <span asp-validation-for="group.MoneyUsed" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="group.Budget" class="form-label"></label>
+                <input asp-for="group.Budget" class="form-control" />
+                <span asp-validation-for="group.Budget" class="text-danger"></span>
+            </div>
+            <button class="btn btn-primary w-100 mt-4" type="submit">Submit</button>
+        </form>
+        
+        <div class="container-fluid mt-5">
+            <form asp-controller="GroupUser" asp-action="Create" method="post">
+                <div>
+                    <label class="form-label">Add username to group</label>
+                    <input class="d-none" name="groupId" value="@Model.group.Id" />
+                    <input class="form-control" name="username" />
+                </div>
+                <button class="btn btn-primary w-100 mt-2" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="card mt-5 p-4">
+    <h3 class="card-header text-white-50">Users</h3>
+    <div class="card-body">
+        <table class="table text-white-50">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" class="text-success">Hours</th>
+                    <th scope="col" class="text-danger">Absent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <th scope="col">@user.Id</th>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td class="text-success">@user.HoursSummary</td>
+                        <td class="text-danger">@user.UnavailableHoursSummary</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

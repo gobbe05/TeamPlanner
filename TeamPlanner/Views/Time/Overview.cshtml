@@ -1,0 +1,163 @@
+﻿@using TeamPlanner.ViewModels
+@model OverviewViewModel
+
+<div id="pagedata" data-week="@Model.Week"></div>
+
+@foreach(var time in Model.Times)
+{
+    <div class="time" data-weekday="@time.Weekday" data-start="@time.Start" data-end="@time.End"></div>
+}
+@foreach(var time in Model.UnavailableTimes)
+{
+    <div class="unav_time" data-weekday="@time.Weekday" data-start="@time.Start" data-end="@time.End"></div>
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <form class="row row-cols-lg-auto g-3 align-items-center" asp-action="Overview">
+                    <h4 class="fw-bold text-white-50">Week</h4>
+
+                    <div class="col-12">
+                        <select asp-for="Week" class="form-control bg-dark border-0">
+                            @for (int i = 1; i <= 52; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5 h-100 bg-dark text-uppercase">
+    <span class="badge circle circle-md bg-info mr-2">Scheduled</span> 
+    <span class="badge circle circle-md bg-danger mr-2">Absent</span> 
+    <div class="card p-5 mt-1">
+        <div class="card-header fw-bold text-white-50">
+            <h6>W. @Model.Week</h6>
+        </div>
+        <div class="card-body">
+            <div class="row text-white text-center fw-bold my-2">
+                <div class="col">Time</div>
+                <div class="col">Måndag</div>
+                <div class="col">Tisdag</div>
+                <div class="col">Onsdag</div>
+                <div class="col">Torsdag</div>
+                <div class="col">Fredag</div>
+                <div class="col">Lördag</div>
+                <div class="col">Söndag</div>
+            </div>
+
+            @for (int i = 0; i < 48; i++)
+            {
+                int hour = i / 2;
+                string hourString;
+                if (hour % 10 == hour)
+                {
+                    hourString = "0" + hour.ToString();
+                }
+                else
+                {
+                    hourString = hour.ToString();
+                }
+                if (i % 2 == 0)
+                {
+                    hourString += ".00";
+                }
+                else
+                {
+                    hourString += ".30";
+                }
+                <div class="row">
+                    <div class="col border-end text-white text-center">
+                        <p>@hourString</p>
+                    </div>
+                    @for (int y = 1; y <= 7; y++)
+                    {
+                        <div class="col p-2 border-end cell" data-weekday="@y" data-time="@hourString">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    let week = document.querySelector("#pagedata").dataset.week
+    if(week == '') week = "1"
+
+    let weekdayCols = []
+    let cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+        cell.addEventListener("click", () => {
+            if(cell.dataset.filled != true) {
+                window.location.href = "/time/create/?weekday=" + cell.dataset.weekday + "&start=" + cell.dataset.time + "&week=" + week || "1";
+            }
+        });
+        if (weekdayCols[cell.dataset.weekday] == null) {
+            weekdayCols[cell.dataset.weekday] = [];
+        }
+        weekdayCols[cell.dataset.weekday].push(cell);
+    })
+
+    let times = document.querySelectorAll(".time");
+    let unav_times = document.querySelectorAll(".unav_time");
+    console.log(unav_times)
+    times.forEach((time) => {
+        let start = false
+        weekdayCols[time.dataset.weekday].forEach((cell) => {
+            if (cell.dataset.time == time.dataset.start) {
+                start = true
+            }
+            else if (cell.dataset.time == time.dataset.end) {
+                start = false
+            }
+            if (start) {
+                cell.classList.add("fill")
+                cell.dataset.filled = true
+            }
+        })
+    })
+    unav_times.forEach((time) => {
+        let start = false
+        weekdayCols[time.dataset.weekday].forEach((cell) => {
+            if (cell.dataset.time == time.dataset.start) {
+                start = true
+            }
+            else if (cell.dataset.time == time.dataset.end) {
+                start = false
+            }
+            if (start) {
+                cell.classList.add("fill_unav")
+                cell.dataset.filled = true
+            }
+        })
+    })
+
+
+</script>
+
+<style>
+    .cell:hover {
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .cell.fill {
+        background-color: #54B4D3;
+    }
+    .cell.fill_unav {
+        background-color: #DC4C64;
+    }
+    .fill.fill_unav{
+        background-color: pink;
+    }
+</style>

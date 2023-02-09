@@ -1,0 +1,71 @@
+﻿@using TeamPlanner.ViewModels
+@model AcceptUserViewModel
+
+<div class="card">
+
+    <div class="card-body">
+        <h3 class="text-white-50 fw-bold">Accept</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Accept</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Accounts)
+                {
+                    if (!user.Accepted)
+                    {
+                        <tr>
+                            <th scope="row"></th>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td><a href="/Account/Accept/@user.UserName">Accept</a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-5">
+    <div class="card-body">
+        <h3 class="text-white-50 fw-bold">Users</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Accounts)
+                {
+                    if (user.Accepted)
+                    {
+                        <tr>
+                            <th scope="row"></th>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td><a href="/Account/Edit/@user.Id">Edit</a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

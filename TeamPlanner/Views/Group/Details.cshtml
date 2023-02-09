@@ -1,0 +1,90 @@
+﻿@using TeamPlanner.ViewModels
+@model GroupDetailsViewModel
+
+<div class="card">
+    <div class="card-body">
+        <form class="row row-cols-lg-auto g-3 align-items-center" asp-action="Details">
+            <h4 class="fw-bold text-white-50">Week</h4>
+            <div class="col-12">
+                <select class="form-select bg-dark border-0" asp-for="Week">
+                    <option value="@null">All</option>
+                    @for (int i = 1; i <= 52; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card p-4 mt-4">
+    <h3 class="card-header text-white-50">Details</h3>
+    <div class="card-body">
+        <table class="table table-borderless text-white-50">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time Used</th>
+                    <th scope="col">Money Used</th>
+                    <th scope="col">Budget</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="col">@Model.Group.Id</th>
+                    <td>@Model.Group.Name</td>
+                    <td>@Model.Group.TimeUsed h</td>
+                    <td>
+                        @Model.Group.MoneyUsed $ @if (Model.Group.Budget - Model.Group.MoneyUsed > 0)
+                        {
+                            <p class="text-success">+@(Model.Group.Budget - Model.Group.MoneyUsed)</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger">@(Model.Group.Budget - Model.Group.MoneyUsed)</p>
+                        }</td>
+                    <td class="text-warning">@Model.Group.Budget $</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-5 p-4">
+    <h3 class="card-header text-white-50">Users</h3>
+    <div class="card-body">
+        <table class="table text-white-50">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" class="text-success">Hours</th>
+                    <th scope="col" class="text-danger">Absent</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Accounts)
+                {
+                    <tr>
+                        <th scope="col">@user.Id</th>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td class="text-success">@user.HoursSummary</td>
+                        <td class="text-danger">@user.UnavailableHoursSummary</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

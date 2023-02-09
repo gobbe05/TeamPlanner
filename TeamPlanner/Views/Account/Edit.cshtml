@@ -1,0 +1,49 @@
+﻿@using TeamPlanner.ViewModels
+@model AccountEditViewModel
+
+@if(TempData["Error"] != null)
+{
+    <h1 class="text-danger">@TempData["error"]</h1>
+}
+
+<div class="card p-5">
+    <div class="card-header">
+        <h3 class="fw-bold text-white-50">Edit User</h3>
+    </div>
+    <div class="card-body">
+        
+        <form asp-action="Edit" method="post">
+            <div>
+                <label class="form-label" asp-for="FirstName">First Name</label>
+                <input class="form-control" asp-for="FirstName" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="form-label" asp-for="LastName">Last Name</label>
+                <input class="form-control" asp-for="LastName" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="form-label" asp-for="Work"></label>
+                <input class="form-control" asp-for="Work" />
+                <span asp-validation-for="Work" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="form-label" asp-for="Salary"></label>
+                <input class="form-control" asp-for="Salary" />
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="form-label" asp-for="Phone"></label>
+                <input class="form-control" asp-for="Phone" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div>
+                <label class="form-label" asp-for="Address"></label>
+                <input class="form-control" asp-for="Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <button class="btn-primary btn w-100 mt-2">Submit</button>
+        </form>
+    </div>
+</div>
