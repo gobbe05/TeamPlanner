@@ -1,27 +1,7 @@
 ﻿@using TeamPlanner.ViewModels
 @model GroupDetailsViewModel
 
-<div class="card">
-    <div class="card-body">
-        <form class="row row-cols-lg-auto g-3 align-items-center" asp-action="Details">
-            <h4 class="fw-bold text-white-50">Week</h4>
-            <div class="col-12">
-                <select class="form-select bg-dark border-0" asp-for="Week">
-                    <option value="@null">All</option>
-                    @for (int i = 1; i <= 52; i++)
-                    {
-                        <option value="@i">@i</option>
-                    }
-                </select>
-            </div>
-            <div class="col-12">
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="card p-4 mt-4">
+<div class="card p-4">
     <h3 class="card-header text-white-50">Details</h3>
     <div class="card-body">
         <table class="table table-borderless text-white-50">
@@ -56,7 +36,27 @@
     </div>
 </div>
 
-<div class="card mt-5 p-4">
+<div class="card mt-4">
+    <div class="card-body">
+        <form class="row row-cols-lg-auto g-3 align-items-center" asp-action="Details">
+            <h4 class="fw-bold text-white-50">Week</h4>
+            <div class="col-12">
+                <select class="form-select bg-dark border-0" asp-for="Week">
+                    <option value="@null">All</option>
+                    @for (int i = 1; i <= 52; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-4 p-4">
     <h3 class="card-header text-white-50">Users</h3>
     <div class="card-body">
         <table class="table text-white-50">
