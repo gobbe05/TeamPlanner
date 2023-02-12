@@ -52,7 +52,7 @@ namespace TeamPlanner.Controllers
 
             if(newUserResponse.Succeeded)
             {
-                await _userManager.AddToRoleAsync(newUser, UserRoles.Admin);
+                await _userManager.AddToRoleAsync(newUser, UserRoles.User);
             }
             else
             {
