@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using TeamPlanner.Data;
 using TeamPlanner.Interfaces;
 using TeamPlanner.Models;
@@ -7,6 +9,7 @@ using TeamPlanner.ViewModels;
 
 namespace TeamPlanner.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class AccountController : Controller
     {
         private readonly UserManager<Account> _userManager;
@@ -18,11 +21,13 @@ namespace TeamPlanner.Controllers
             _signInManager = signInManager;
             _accountRepository = accountRepository;
         }
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel RegisterVM)
         {
             if(!ModelState.IsValid)
@@ -59,13 +64,15 @@ namespace TeamPlanner.Controllers
                 TempData["Error"] = "There was an error on our  side. Please try again";
                 return View(RegisterVM);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel LoginVM)
         {
             if(!ModelState.IsValid)

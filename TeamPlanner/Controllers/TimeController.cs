@@ -9,6 +9,7 @@ using TeamPlanner.ViewModels;
 
 namespace TeamPlanner.Controllers
 {
+    [Authorize]
     public class TimeController : Controller
     {
         private readonly ITimeRepository _timeRepository;
@@ -27,6 +28,7 @@ namespace TeamPlanner.Controllers
         public async Task<IActionResult> Overview()
         {
             var currentUser = _userManager.Users.FirstOrDefault(item => item.UserName == User.Identity.Name);
+            if(currentUser == null || currentUser.Accepted == false) return RedirectToAction("Index", "UserNotFound");
             var times = await _timeRepository.GetAllTimesByWeekAsync("1", currentUser.Id);
             var unavailableTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync("1", currentUser.Id);
             var viewModel = new OverviewViewModel
@@ -86,10 +88,6 @@ namespace TeamPlanner.Controllers
             };
             return View(viewModel);
         }
-        public IActionResult Employee()
-        {
-            return View();
-        }
         public IActionResult Create(string weekday, string week, string start, string username)
         {
             var groups = _groupRepository.GetAll();
@@ -99,6 +97,7 @@ namespace TeamPlanner.Controllers
             };
             return View(vm);
         }
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult AdminCreate(string weekday, string week, string start, string username)
         {
             var groups = _groupRepository.GetAll();
@@ -109,6 +108,7 @@ namespace TeamPlanner.Controllers
             return View(vm);
         }
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> CreateTime(CreateTimeViewModel TimeVM)
         {
             if(!ModelState.IsValid)

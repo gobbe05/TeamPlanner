@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TeamPlanner.Data;
 using TeamPlanner.Interfaces;
 using TeamPlanner.Models;
 using TeamPlanner.ViewModels;
 
 namespace TeamPlanner.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class GroupController : Controller
     {
         private readonly IGroupRepository _groupRepository;

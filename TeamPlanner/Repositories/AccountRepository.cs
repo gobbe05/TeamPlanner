@@ -2,16 +2,19 @@
 using TeamPlanner.Data;
 using TeamPlanner.Interfaces;
 using TeamPlanner.Models;
+using TeamPlanner.ViewModels;
 
 namespace TeamPlanner.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ITimeRepository _timeRepository;
 
-        public AccountRepository(ApplicationDbContext context)
+        public AccountRepository(ApplicationDbContext context, ITimeRepository timeRepository)
         {
             _context = context;
+            _timeRepository = timeRepository;
         }
         public async Task<List<Account>> GetAll()
         {
@@ -36,7 +39,25 @@ namespace TeamPlanner.Repositories
             return true;
 
         }
+        public async Task<UserSummary?> GetUserSummaryByWeek(string week, string id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(item => item.Id == id);
+            if (user == null) return null;
 
+            int hourSummary = await _timeRepository.GetHourSummaryByWeek(week, id);
+            int unavHourSummary = await _timeRepository.GetUnavailableHourSummaryByWeek(week, id);
+            int earned = hourSummary * user.Salary;
+            UserSummary summary = new UserSummary
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Hours = hourSummary,
+                Absent = unavHourSummary,
+                Earned= earned
+
+            };
+            return summary;
+        }
         public bool Update(Account account)
         {
             _context.Update(account);

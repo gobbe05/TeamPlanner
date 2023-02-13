@@ -1,17 +1,99 @@
 ﻿@using TeamPlanner.ViewModels
 @model DashboardViewModel
 
-<div class="container">
-    <div class="row">
+<div id="pagedata" data-week="@Model.Week"></div>
+@foreach (var time in Model.Times)
+{
+    <div class="time" data-weekday="@time.Weekday" data-start="@time.Start" data-end="@time.End"></div>
+}
+@foreach (var time in Model.UnavailableTimes)
+{
+    <div class="unav_time" data-weekday="@time.Weekday" data-start="@time.Start" data-end="@time.End"></div>
+}
+
+<div class="container mt-5">
+    <div class="gap-5 row ">
         <div class="col w-50">
-            
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-white-50 fw-bold">This Week</h4>
+                        <table class="table text-white-50">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col" class="text-warning">Earned</th>
+                                    <th scope="col" class="text-success">Hours</th>
+                                    <th scope="col" class="text-danger">Absent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>@Model.UserSummary.FirstName</th>
+                                    <td>@Model.UserSummary.LastName</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Model.UserSummary.Earned $</td>
+                                    <td>@Model.UserSummary.Hours</td>
+                                    <td>@Model.UserSummary.Absent</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table text-white-50">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col" class="text-warning"></th>
+                                    <th scope="col" class="text-success">Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var group in Model.Groups)
+                                {
+                                    <tr>
+                                    <th>@group.Name</th>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@group.Hours</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="col w-50">
-            <div class="p-2 row">
-                <div class="card p-2 mt-1">
+        <div class="col w-50 d-flex">
+            <div class="row">
+                <div class="card">
                     <div class="card-body">
 
-                        @for (int i = 0; i < 48; i+=2)
+                        <div class="row text-white-50 text-center fw-bold my-2">
+                            <div class="col">Måndag</div>
+                            <div class="col">Tisdag</div>
+                            <div class="col">Onsdag</div>
+                            <div class="col">Torsdag</div>
+                            <div class="col">Fredag</div>
+                            <div class="col">Lördag</div>
+                            <div class="col">Söndag</div>
+                        </div>
+
+                        @for (int i = 0; i < 48; i++)
                         {
                             int hour = i / 2;
                             string hourString;
@@ -32,12 +114,9 @@
                                 hourString += ".30";
                             }
                             <div class="row">
-                                <div class="col border-end text-white text-center">
-                                    <p class="m-0">@hourString</p>
-                                </div>
                                 @for (int y = 1; y <= 7; y++)
                                 {
-                                    <div class="col border-end cell" data-weekday="@y" data-time="@hourString">
+                                    <div class="col cell p-1" data-weekday="@y" data-time="@hourString">
                                     </div>
                                 }
                             </div>
@@ -49,3 +128,67 @@
         </div>
     </div>
 </div>
+
+<script>
+    let week = document.querySelector("#pagedata").dataset.week
+    if (week == '') week = "1"
+
+    let weekdayCols = []
+    let cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+        if (weekdayCols[cell.dataset.weekday] == null) {
+            weekdayCols[cell.dataset.weekday] = [];
+        }
+        weekdayCols[cell.dataset.weekday].push(cell);
+    })
+
+    let times = document.querySelectorAll(".time");
+    let unav_times = document.querySelectorAll(".unav_time");
+    times.forEach((time) => {
+        let start = false
+        weekdayCols[time.dataset.weekday].forEach((cell) => {
+            if (cell.dataset.time == time.dataset.start) {
+                start = true
+            }
+            else if (cell.dataset.time == time.dataset.end) {
+                start = false
+            }
+            if (start) {
+                cell.classList.add("fill")
+                cell.dataset.filled = true
+            }
+        })
+    })
+    unav_times.forEach((time) => {
+        let start = false
+        weekdayCols[time.dataset.weekday].forEach((cell) => {
+            if (cell.dataset.time == time.dataset.start) {
+                start = true
+            }
+            else if (cell.dataset.time == time.dataset.end) {
+                start = false
+            }
+            if (start) {
+                cell.classList.add("fill_unav")
+                cell.dataset.filled = true
+            }
+        })
+    })
+
+
+</script>
+
+<style>
+
+    .cell.fill {
+        background-color: #54B4D3;
+    }
+
+    .cell.fill_unav {
+        background-color: #DC4C64;
+    }
+
+    .fill.fill_unav {
+        background-color: pink;
+    }
+</style>

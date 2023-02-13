@@ -11,6 +11,7 @@ namespace TeamPlanner.Interfaces
         Group GetByName(string name);
         Task<List<AccountSummary>> GetAllUsersByGroup(int groupId);
         Task<List<AccountSummary>> GetAllUsersByGroup(int groupId, string week);
+        Task<IEnumerable<Group>> GetAllGroupsByUser(string uid);    
         List<Group> GetAll();
         bool Delete(Group group);
         bool Update(Group group);

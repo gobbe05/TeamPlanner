@@ -1,45 +1,47 @@
 ﻿@using TeamPlanner.ViewModels
 @model CreateTimeViewModel
 
-<div>
+<div class="card">
+    <div class="card-header">
+        <h4 class="text-white-50 fw-bold mt-2">Schedule unavailable time</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="CreateUnavailableTime" method="post" enctype="multipart/form-data">
+            <input class="d-none" asp-for="Username" value="@User.Identity.Name" />
+            <div>
+                <label asp-for="GroupId" class="form-label"></label>
+                <select asp-for="GroupId" class="form-select bg-dark text-white-50">
+                    @foreach (var group in Model.Groups)
+                    {
+                        <option value="@group.Id">
+                            @group.Name
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="GroupId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Start" class="form-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="End" class="form-label"></label>
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Week" class="form-label"></label>
+                <input asp-for="Week" class="form-control" />
+                <span asp-validation-for="Week" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Weekday" class="form-label"></label>
+                <input asp-for="Weekday" class="form-control" />
+                <span asp-validation-for="Weekday" class="text-danger"></span>
+            </div>
 
-    <form class="mt-5" asp-action="CreateUnavailableTime" method="post" enctype="multipart/form-data">
-        <h1>Create new unavailable time</h1>
-        <input class="d-none" asp-for="Username" value="@User.Identity.Name"/>
-        <div>
-            <label asp-for="GroupId" class="form-label"></label>
-            <select asp-for="GroupId" class="form-select">
-                @foreach(var group in Model.Groups)
-                {
-                    <option value="@group.Id">
-                        @group.Name
-                    </option>
-                }
-            </select>
-            <span asp-validation-for="GroupId" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="Start" class="form-label"></label>
-            <input asp-for="Start" class="form-control" />
-            <span asp-validation-for="Start" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="End" class="form-label"></label>
-            <input asp-for="End" class="form-control" />
-            <span asp-validation-for="End" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="Week" class="form-label"></label>
-            <input asp-for="Week" class="form-control" />
-            <span asp-validation-for="Week" class="text-danger"></span>
-        </div>
-        <div>
-            <label asp-for="Weekday" class="form-label"></label>
-            <input asp-for="Weekday" class="form-control" />
-            <span asp-validation-for="Weekday" class="text-danger"></span>
-        </div>
-
-        <button type="submit">Submit</button>
-    </form>
-
+            <button type="submit" class="btn btn-primary w-100 mt-2 rounded">Submit</button>
+        </form>
+    </div>
 </div>

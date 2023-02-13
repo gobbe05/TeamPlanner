@@ -40,6 +40,17 @@ namespace TeamPlanner.Repositories
         {
             return await _context.UnavailableTimes.Where(item => item.Week == week && item.WorkerId == id).ToListAsync();
         }
+        public async Task<int> GetHourSummaryByWeek(string week, string id)
+        {
+            var sum = 0;
+            var times = await _context.Times.Where(item => item.Week == week && item.WorkerId == id).ToListAsync();
+            foreach (var time in times)
+            {
+                TimeSpan duration = DateTime.Parse(time.End.Replace('.', ':')).Subtract(DateTime.Parse(time.Start.Replace('.', ':')));
+                sum += (int)duration.TotalMinutes;
+            }
+            return sum / 60;
+        }
         public async Task<int> GetHourSummaryByWeek(string week, string id, int groupId) 
         {
             var sum = 0;
@@ -55,6 +66,17 @@ namespace TeamPlanner.Repositories
         {
             var sum = 0;
             var times = await _context.Times.Where(item => item.WorkerId == id && item.GroupId == groupId).ToListAsync();
+            foreach (var time in times)
+            {
+                TimeSpan duration = DateTime.Parse(time.End.Replace('.', ':')).Subtract(DateTime.Parse(time.Start.Replace('.', ':')));
+                sum += (int)duration.TotalMinutes;
+            }
+            return sum / 60;
+        }
+        public async Task<int> GetUnavailableHourSummaryByWeek(string week, string id)
+        {
+            var sum = 0;
+            var times = await _context.UnavailableTimes.Where(item => item.Week == week && item.WorkerId == id).ToListAsync();
             foreach (var time in times)
             {
                 TimeSpan duration = DateTime.Parse(time.End.Replace('.', ':')).Subtract(DateTime.Parse(time.Start.Replace('.', ':')));

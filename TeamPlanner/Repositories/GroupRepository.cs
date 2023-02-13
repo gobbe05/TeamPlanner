@@ -68,6 +68,17 @@ namespace TeamPlanner.Repositories
             }
             return userList;
         }
+        public async Task<IEnumerable<Group>> GetAllGroupsByUser(string uid)
+        {
+            var entries = _context.GroupUsers.Where(item => item.WorkerId == uid).ToList();
+            List<Group> groups = new List<Group>();
+            foreach(var entry in entries)
+            {
+                var group = await _context.Groups.FirstOrDefaultAsync(item => item.Id == entry.GroupId);
+                groups.Add(group);
+            }
+            return groups;
+        }
         public bool Create(Group group)
         {
             _context.Groups.Add(group);
