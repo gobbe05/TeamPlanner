@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamPlanner.Data;
 using TeamPlanner.Interfaces;
 using TeamPlanner.Models;
+using TeamPlanner.ViewModels;
 
 namespace TeamPlanner.Controllers
 {
@@ -21,10 +22,16 @@ namespace TeamPlanner.Controllers
         public async Task<IActionResult> Create(int groupId, string username)
         {
             var worker = await _userManager.FindByNameAsync(username);
+            var group = _groupRepository.GetById(groupId);
             if (worker == null)
             {
                 TempData["Error"] = "User not found";
-                return RedirectToAction("Edit", "Group", groupId);
+                var vm = new EditGroupViewModel
+                {
+                    group = group
+                };
+
+                return RedirectToAction("Edit", "Group", new {Id = groupId});
             }
             var groupUser = new GroupUser
             {

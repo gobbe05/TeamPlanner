@@ -106,7 +106,7 @@ namespace TeamPlanner.Controllers
             if(result != true)
             {
                 TempData["Error"] = "There was an error with the data";
-                return View(groupVM);
+                return View("Error");
             }
             return View(groupVM);
         }

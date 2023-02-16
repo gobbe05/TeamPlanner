@@ -111,15 +111,21 @@ namespace TeamPlanner.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            List<Account> accounts = await _accountRepository.GetAll();
+            if(accounts == null)
+            {
+                return View("Error");
+            }
             var model = new AcceptUserViewModel
             {
-                Accounts = await _accountRepository.GetAll()
+                Accounts = accounts
             };
             return View(model);
         }
         public async Task<IActionResult> Accept(string id)
         {
-            await _accountRepository.Accept(id);
+            var result = await _accountRepository.Accept(id);
+            if (result != true) return View("Error");
             return RedirectToAction("Index");
         }
         [HttpGet]
@@ -163,7 +169,8 @@ namespace TeamPlanner.Controllers
             account.Phone = accountVM.Phone;
             account.Address = accountVM.Address;
 
-            _accountRepository.Update(account);
+            bool result = _accountRepository.Update(account);
+            if(!result) return View("Error");
             
             return RedirectToAction("Index");
         }

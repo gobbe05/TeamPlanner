@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using TeamPlanner.Interfaces;
 using TeamPlanner.Models;
 using TeamPlanner.ViewModels;
@@ -17,6 +19,7 @@ namespace TeamPlanner.Controllers
 
         public DashboardController(IAccountRepository accountRepository, IGroupRepository groupRepository, ITimeRepository timeRepository, UserManager<Account> userManager)
         {
+
             _accountRepository = accountRepository;
             _groupRepository = groupRepository;
             _timeRepository = timeRepository;
@@ -26,9 +29,12 @@ namespace TeamPlanner.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null || user.Accepted == false) return RedirectToAction("Index", "UserNotFound");
-            var times = await _timeRepository.GetAllTimesByWeekAsync("1", user.Id);
-            var unavTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync("1", user.Id);
-            var userSummary = await _accountRepository.GetUserSummaryByWeek("1", user.Id);
+
+            string week = ISOWeek.GetWeekOfYear(DateTime.Now).ToString();
+
+            var times = await _timeRepository.GetAllTimesByWeekAsync(week, user.Id);
+            var unavTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync(week, user.Id);
+            var userSummary = await _accountRepository.GetUserSummaryByWeek(week, user.Id);
 
             var groups = await _groupRepository.GetAllGroupsByUser(user.Id);
             List<GroupSummary> groupSummaries = new List<GroupSummary>(); 

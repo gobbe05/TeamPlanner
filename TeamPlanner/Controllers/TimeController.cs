@@ -15,11 +15,13 @@ namespace TeamPlanner.Controllers
         private readonly ITimeRepository _timeRepository;
         private readonly IGroupRepository _groupRepository;
         private readonly UserManager<Account> _userManager;
+        private string _week;
         public TimeController(ITimeRepository timeRepository, UserManager<Account> userManager, IGroupRepository groupRepository)
         {
             _timeRepository = timeRepository;
             _userManager = userManager;
             _groupRepository = groupRepository;
+            _week = ISOWeek.GetWeekOfYear(DateTime.Now).ToString();
         }
         public IActionResult Index()
         {
@@ -29,10 +31,11 @@ namespace TeamPlanner.Controllers
         {
             var currentUser = _userManager.Users.FirstOrDefault(item => item.UserName == User.Identity.Name);
             if(currentUser == null || currentUser.Accepted == false) return RedirectToAction("Index", "UserNotFound");
-            var times = await _timeRepository.GetAllTimesByWeekAsync("1", currentUser.Id);
-            var unavailableTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync("1", currentUser.Id);
+            var times = await _timeRepository.GetAllTimesByWeekAsync(_week, currentUser.Id);
+            var unavailableTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync(_week, currentUser.Id);
             var viewModel = new OverviewViewModel
             {
+                Week = _week,
                 Times = times,
                 UnavailableTimes = unavailableTimes,
             };
@@ -57,10 +60,12 @@ namespace TeamPlanner.Controllers
         {
             
             var currentUser = _userManager.Users.FirstOrDefault(item => item.UserName == User.Identity.Name);
-            var times = await _timeRepository.GetAllTimesByWeekAsync("1", currentUser.Id);
-            var unavailableTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync("1", currentUser.Id);
+            var times = await _timeRepository.GetAllTimesByWeekAsync(_week, currentUser.Id);
+            var unavailableTimes = await _timeRepository.GetAllUnavailableTimesByWeekAsync(_week, currentUser.Id);
             var viewModel = new AdminViewModel
             {
+                Week = _week,
+                Username = currentUser.UserName,
                 Times = times,
                 UnavailableTimes = unavailableTimes,
             };
