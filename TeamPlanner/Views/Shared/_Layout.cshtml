@@ -65,6 +65,12 @@
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

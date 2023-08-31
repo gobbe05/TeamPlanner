@@ -26,7 +26,7 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 var app = builder.Build();
 
-if(args.Length == 1 && args[0].ToLower() == "seeddata")
+if(args.Length == 1 && args[0].ToLower() == "seeddata") // Run data seeding for roles
 {
     await Startup.SeedUsersAndRolesAsync(app);
 }
